@@ -1,25 +1,403 @@
 
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+cover/
+
+# Translations
+*.mo
+*.pot
+
+# Django stuff:
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+
+# Flask stuff:
+instance/
+.webassets-cache
+
+# Scrapy stuff:
+.scrapy
+
+# Sphinx documentation
+docs/_build/
+
+# PyBuilder
+.pybuilder/
+target/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb
+
+# IPython
+profile_default/
+ipython_config.py
+
+# pyenv
+.python-version
+
+# pipenv
+Pipfile.lock
+
+# poetry
+poetry.lock
+
+# pdm
+.pdm.toml
+.pdm-python
+.pdm-build/
+
+# PEP 582
+__pypackages__/
+
+# Celery stuff
+celerybeat-schedule
+celerybeat.pid
+
+# SageMath parsed files
+*.sage.py
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+.env.local
+.env.*.local
+
+# Spyder project settings
+.spyderproject
+.spyproject
+
+# Rope project settings
+.ropeproject
+
+# mkdocs documentation
+/site
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre type checker
+.pyre/
+
+# pytype static type analyzer
+.pytype/
+
+# Cython debug symbols
+cython_debug/
+
+# PyCharm
+.idea/
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# Local History for Visual Studio Code
+.history/
+
+# Built Visual Studio Code Extensions
+*.vsix
+
+# Streamlit
+.streamlit/
+*.streamlit/
+
+# Data files - IMPORTANT for council tax data protection
+*.csv
+*.xlsx
+*.xls
+*.json
+*.db
+*.sqlite
+*.sqlite3
+*.parquet
+*.feather
+*.h5
+*.hdf5
+*.pkl
+*.pickle
+*.msgpack
+*.npy
+*.npz
+
+# Exclude sample data directory but keep structure
+data/*
+!data/.gitkeep
+!data/sample/
+data/sample/*
+!data/sample/.gitkeep
+
+# Sensitive data patterns
+*_sensitive.*
+*_private.*
+*_confidential.*
+*_secret.*
+*.key
+*.pem
+*.crt
+*.cer
+*.p12
+*.pfx
+
+# Council tax specific sensitive patterns
+*council_tax_data*
+*resident_data*
+*property_data*
+*payment_data*
+*fraud_cases*
+*investigation*
+*personal_data*
+*citizen_data*
+*taxpayer*
+
+# Model files (can be large)
+*.h5
+*.pb
+*.pth
+*.pt
+*.onnx
+*.tflite
+*.weights
+models/*
+!models/.gitkeep
+
+# Logs and reports
+logs/
+*.log
+reports/
+*.report
+*.audit
+audit_trail/
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.backup
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Cache directories
+.cache/
+cache/
+__pycache__/
+*.pyc
+
+# Output directories
+output/
+results/
+exports/
+
+# Configuration files with potential secrets
+config.ini
+config.yaml
+config.yml
+settings.ini
+settings.json
+credentials.*
+secrets.*
+
+# Keep example configs
+!config.example.*
+!settings.example.*
+
+# Docker
+*.dockerignore
+docker-compose.override.yml
+
+# Terraform
+*.tfstate
+*.tfstate.*
+.terraform/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+*.stackdump
+[Dd]esktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+*.lnk
+
+# Linux
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+.nfs*
+
+# Node (for any JS/TS tooling)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.pnpm-debug.log*
+
+# Archives (potentially large)
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+*.rar
+*.7z
+*.dmg
+*.iso
+*.jar
+
+# Media files (potentially large)
+*.mp4
+*.avi
+*.mov
+*.wmv
+*.flv
+*.mkv
+*.mp3
+*.wav
+*.flac
+
+# Database dumps
+*.dump
+*.sql
+*.bson
+
+# Backup files
+backup/
+backups/
+*.backup
+*.bk
+
+# Test data (except sample)
+test_data/
+test_output/
+!tests/test_*.py
+
+# Performance profiling
+*.prof
+*.lprof
+.benchmarks/
+
+# Documentation build
+docs/_build/
+docs/build/
+site/
+
+# CI/CD
+.gitlab-ci-local/
+.github/workflows/local/
+
+# Custom project specific
+fraud_detection_output/
+case_investigations/
+citizen_records/
+property_records/
+payment_records/
+
+# Keep directory structure files
+!.gitkeep
+!README.md
+!requirements.txt
+
+# Claude-specific
+.claude/
+.claude-flow/
+.roo/
+.roomodes
+memory/
+
+# Swarm artifacts
+swarm_data/
+swarm_logs/
+agent_memory/
+
 # Claude Flow generated files
-.claude/settings.local.json
 .mcp.json
 claude-flow.config.json
 .swarm/
 .hive-mind/
-memory/claude-flow-data.json
-memory/sessions/*
-!memory/sessions/README.md
-memory/agents/*
-!memory/agents/README.md
-coordination/memory_bank/*
-coordination/subtasks/*
-coordination/orchestration/*
-*.db
-*.db-journal
-*.db-wal
-*.sqlite
-*.sqlite-journal
-*.sqlite-wal
-claude-flow
-claude-flow.bat
-claude-flow.ps1
 hive-mind-prompt-*.txt
