@@ -1,6 +1,11 @@
-# Netlify deployment configuration
+# Netlify static deployment configuration
 [build]
   publish = "static/"
+  command = ""
+  ignore = "git diff --quiet HEAD^ HEAD -- static/ netlify.toml"
+
+[build.environment]
+  NODE_VERSION = "18"
 
 [[redirects]]
   from = "/*"
@@ -14,4 +19,10 @@
     X-Content-Type-Options = "nosniff"
     X-XSS-Protection = "1; mode=block"
     Referrer-Policy = "strict-origin-when-cross-origin"
-    Content-Security-Policy = "default-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://cdn.plot.ly"
+    Content-Security-Policy = "default-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://cdn.plot.ly data: blob:"
+    Cache-Control = "public, max-age=31536000"
+
+[[headers]]
+  for = "/index.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
