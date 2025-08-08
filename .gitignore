@@ -154,8 +154,9 @@ cython_debug/
 # Built Visual Studio Code Extensions
 *.vsix
 
-# Streamlit
-.streamlit/
+# Streamlit (keep config.toml for deployment)
+.streamlit/secrets.toml
+.streamlit/cache/
 *.streamlit/
 
 # Data files - IMPORTANT for council tax data protection

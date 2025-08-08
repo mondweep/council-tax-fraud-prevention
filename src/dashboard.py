@@ -87,7 +87,7 @@ def main():
             fig = px.pie(fraud_df, values='Count', names='Fraud Type', 
                         title="Detected Fraud Types",
                         color_discrete_sequence=px.colors.sequential.RdBu)
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, use_container_width=True, key="fraud_type_distribution")
         
         # Recent high-risk cases
         st.subheader("🚨 High-Risk Cases Requiring Attention")
@@ -98,7 +98,7 @@ def main():
             with st.expander(f"Case {case.case_id} - {case.risk_level.value.upper()} RISK"):
                 col1, col2 = st.columns([1, 2])
                 with col1:
-                    st.plotly_chart(display_risk_gauge(case.risk_score), use_container_width=True)
+                    st.plotly_chart(display_risk_gauge(case.risk_score), use_container_width=True, key=f"risk_gauge_{case.case_id}")
                 with col2:
                     st.write(f"**Fraud Type:** {case.fraud_type.value if case.fraud_type else 'Unknown'}")
                     st.write(f"**Classification:** {'FRAUD' if case.is_likely_fraud else 'ERROR' if case.is_likely_error else 'UNCERTAIN'}")
@@ -182,7 +182,7 @@ def main():
                 col1, col2, col3 = st.columns(3)
                 
                 with col1:
-                    st.plotly_chart(display_risk_gauge(assessment.risk_score), use_container_width=True)
+                    st.plotly_chart(display_risk_gauge(assessment.risk_score), use_container_width=True, key="case_analysis_risk_gauge")
                 
                 with col2:
                     st.metric("Risk Level", assessment.risk_level.value.upper())
@@ -298,7 +298,7 @@ def main():
             color=list(risk_distribution.values()),
             color_continuous_scale='RdYlGn_r'
         )
-        st.plotly_chart(fig_risk, use_container_width=True)
+        st.plotly_chart(fig_risk, use_container_width=True, key="risk_distribution_chart")
         
         # Time series simulation
         st.subheader("Detection Trends (Simulated)")
@@ -314,7 +314,7 @@ def main():
         
         fig_trend = px.line(trend_df, x='Date', y=['Fraud Cases', 'Error Cases'],
                            title="Detection Trends Over Time")
-        st.plotly_chart(fig_trend, use_container_width=True)
+        st.plotly_chart(fig_trend, use_container_width=True, key="detection_trends_chart")
         
         # Financial impact
         st.subheader("Estimated Financial Impact")

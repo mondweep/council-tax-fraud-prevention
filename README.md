@@ -24,6 +24,14 @@
 
 The **Council Tax Fraud Prevention System** is an advanced AI-powered platform designed to detect, classify, and prevent council tax fraud across UK local authorities. The system addresses the £60-90 million annual cost of council tax fraud by providing intelligent detection capabilities that distinguish between deliberate fraud and administrative errors.
 
+### 🆕 Latest Updates
+- ✅ **Streamlit Cloud Ready**: Full deployment configuration with `streamlit_app.py` entry point
+- ✅ **Netlify Static Demo**: Interactive HTML version in `static/` folder for instant deployment
+- ✅ **Fixed Dashboard Issues**: Resolved plotly chart duplicate ID errors
+- ✅ **Enhanced Security**: Comprehensive `.gitignore` with 400+ exclusion rules
+- ✅ **Multiple Deployment Options**: Support for Streamlit Cloud, Netlify, Docker, and cloud platforms
+- ✅ **Optimized Dependencies**: Minimal requirements file for faster deployment
+
 ### Problem Statement
 
 UK council tax fraud encompasses multiple sophisticated schemes:
@@ -113,15 +121,19 @@ streamlit run src/dashboard.py
 ### Production Dependencies
 
 ```bash
+# For Streamlit Cloud deployment (minimal):
 pip install -r requirements.txt
+
+# Alternative minimal file if needed:
+pip install -r requirements-minimal.txt
 ```
 
-Core packages:
+Core packages (requirements.txt):
 - `streamlit==1.35.0` - Web interface
 - `pandas==2.2.2` - Data processing
 - `plotly==5.21.0` - Visualizations
 - `numpy==1.26.4` - Numerical computing
-- `pydantic==2.7.4` - Data validation
+- `python-dateutil==2.9.0` - Date handling
 
 ### Development Dependencies
 
@@ -209,41 +221,49 @@ print(f"High risk cases: {results['statistics']['high_risk']}")
 
 ## 🚀 Deployment
 
-### Development Deployment
+### Quick Deployment Options
 
+#### 1. Streamlit Community Cloud (Recommended - Free)
 ```bash
-# Using Make
-make run-dashboard
+# Push to GitHub
+git add .
+git commit -m "Deploy Council Tax Fraud Prevention System"
+git push origin main
 
-# Direct command
-streamlit run src/dashboard.py --server.port 8501
+# Deploy at share.streamlit.io
+# Repository: YOUR_USERNAME/council-tax-fraud-prevention
+# Main file: streamlit_app.py
+```
+
+#### 2. Netlify (Static Demo)
+```bash
+# Deploy static version instantly
+netlify deploy --dir=static --prod
+
+# Or drag 'static' folder to app.netlify.com/drop
+```
+
+#### 3. Docker Container
+```bash
+# Build and run locally
+docker build -t council-fraud-prevention .
+docker run -p 8501:8501 council-fraud-prevention
 ```
 
 ### Production Deployment
 
-#### Docker Container
-```bash
-# Build image
-docker build -t council-fraud-prevention:latest .
+#### Streamlit Community Cloud
+1. Go to [share.streamlit.io](https://share.streamlit.io)
+2. Click "New app"
+3. Enter repository details:
+   - Repository: `YOUR_USERNAME/council-tax-fraud-prevention`
+   - Branch: `main`
+   - Main file: `streamlit_app.py`
+4. Click "Deploy"
 
-# Run container
-docker run -d \
-  --name fraud-prevention \
-  -p 8501:8501 \
-  --restart unless-stopped \
-  council-fraud-prevention:latest
+**Your app will be available at:** `https://council-tax-fraud-prevention.streamlit.app`
 
-# With environment variables
-docker run -d \
-  --name fraud-prevention \
-  -p 8501:8501 \
-  -e ENVIRONMENT=production \
-  -e LOG_LEVEL=INFO \
-  --restart unless-stopped \
-  council-fraud-prevention:latest
-```
-
-#### Cloud Deployment
+#### Cloud Platforms
 
 **AWS ECS/Fargate**
 ```bash
@@ -261,6 +281,12 @@ az container create \
   --image fraud-prevention:latest \
   --cpu 2 --memory 4 \
   --ports 8501
+```
+
+**Google Cloud Run**
+```bash
+gcloud builds submit --tag gcr.io/PROJECT_ID/fraud-prevention
+gcloud run deploy --image gcr.io/PROJECT_ID/fraud-prevention --platform managed
 ```
 
 #### Environment Variables
@@ -429,23 +455,34 @@ make security-check
 
 ```
 council-tax-fraud-prevention/
-├── src/                     # Source code
-│   ├── fraud_detector.py    # Core detection engine
-│   ├── dashboard.py         # Streamlit web interface
-│   ├── cli_demo.py         # CLI demonstration
-│   └── data_generator.py   # Sample data generation
-├── tests/                  # Test suite
+├── src/                          # Source code
+│   ├── fraud_detector.py         # Core detection engine
+│   ├── dashboard.py             # Streamlit web interface (Fixed plotly keys)
+│   ├── cli_demo.py              # CLI demonstration
+│   └── data_generator.py        # Sample data generation
+├── static/                      # Static HTML version for Netlify
+│   └── index.html               # Interactive demo interface
+├── tests/                       # Test suite
 │   └── test_fraud_detector.py
-├── docs/                   # Documentation
-│   ├── README.md           # Detailed documentation
+├── docs/                        # Documentation
+│   ├── README.md                # Detailed documentation
 │   └── uk-council-tax-fraud-analysis.md
-├── scripts/                # Setup and utility scripts
+├── scripts/                     # Setup and utility scripts
 │   └── setup_environment.sh
-├── requirements.txt        # Production dependencies
-├── requirements-dev.txt    # Development dependencies
-├── Makefile               # Development commands
-├── Dockerfile             # Container configuration
-└── README.md              # Main documentation
+├── .streamlit/                  # Streamlit configuration
+│   └── config.toml              # Theme and settings
+├── streamlit_app.py             # Entry point for Streamlit Cloud
+├── requirements.txt             # Production dependencies (minimal)
+├── requirements-dev.txt         # Development dependencies
+├── requirements-minimal.txt     # Backup minimal dependencies
+├── netlify.toml                # Netlify deployment config
+├── Dockerfile                   # Container configuration
+├── .dockerignore               # Docker exclusions
+├── .gitignore                  # Git exclusions (400+ rules)
+├── Makefile                    # Development commands
+├── DEPLOYMENT.md               # Deployment guide
+├── STREAMLIT_DEPLOYMENT.md     # Streamlit-specific guide
+└── README.md                   # Main documentation
 ```
 
 ### Contributing
