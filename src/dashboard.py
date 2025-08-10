@@ -54,7 +54,7 @@ def main():
     st.sidebar.header("Control Panel")
     
     # Main tabs
-    tab1, tab2, tab3, tab4, tab5 = st.tabs(["📊 Dashboard", "🔍 Case Analysis", "🎯 Pattern Detection", "📈 Statistics", "⚙️ Settings"])
+    tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs(["📊 Dashboard", "📋 Case Explorer", "🔍 Case Analysis", "🎯 Pattern Detection", "📈 Statistics", "⚙️ Settings"])
     
     with tab1:
         st.header("Real-time Monitoring Dashboard")
@@ -108,6 +108,178 @@ def main():
                         st.write(f"• {rec}")
     
     with tab2:
+        st.header("📋 All Cases Explorer")
+        st.write(f"**Total Cases in System: {len(sample_cases)}**")
+        
+        # Filters
+        col1, col2, col3, col4 = st.columns(4)
+        
+        with col1:
+            risk_filter = st.selectbox(
+                "Filter by Risk Level",
+                ["All", "Critical", "High", "Medium", "Low"]
+            )
+        
+        with col2:
+            fraud_filter = st.selectbox(
+                "Filter by Classification",
+                ["All", "Likely Fraud", "Likely Error", "Uncertain"]
+            )
+        
+        with col3:
+            fraud_type_filter = st.selectbox(
+                "Filter by Fraud Type",
+                ["All", "Single Person Discount", "Student Exemption", "Empty Property", 
+                 "Council Tax Reduction", "Property Banding", "Cuckooing"]
+            )
+        
+        with col4:
+            sort_by = st.selectbox(
+                "Sort by",
+                ["Risk Score (High to Low)", "Risk Score (Low to High)", 
+                 "Case ID", "Property ID", "Confidence"]
+            )
+        
+        # Search box
+        search_term = st.text_input("Search cases (by ID, property, or account holder):", "")
+        
+        # Filter and sort the cases
+        filtered_results = []
+        for case, assessment in zip(sample_cases, results['assessments']):
+            # Apply filters
+            if risk_filter != "All" and assessment.risk_level.value.lower() != risk_filter.lower():
+                continue
+            
+            if fraud_filter == "Likely Fraud" and not assessment.is_likely_fraud:
+                continue
+            elif fraud_filter == "Likely Error" and not assessment.is_likely_error:
+                continue
+            elif fraud_filter == "Uncertain" and (assessment.is_likely_fraud or assessment.is_likely_error):
+                continue
+            
+            if fraud_type_filter != "All" and assessment.fraud_type:
+                if assessment.fraud_type.value != fraud_type_filter:
+                    continue
+            
+            # Apply search
+            if search_term:
+                search_lower = search_term.lower()
+                if not any([
+                    search_lower in case.get('case_id', '').lower(),
+                    search_lower in case.get('property_id', '').lower(),
+                    search_lower in case.get('account_holder', '').lower(),
+                    search_lower in case.get('address', '').lower()
+                ]):
+                    continue
+            
+            filtered_results.append((case, assessment))
+        
+        # Sort results
+        if "Risk Score (High to Low)" in sort_by:
+            filtered_results.sort(key=lambda x: x[1].risk_score, reverse=True)
+        elif "Risk Score (Low to High)" in sort_by:
+            filtered_results.sort(key=lambda x: x[1].risk_score)
+        elif "Case ID" in sort_by:
+            filtered_results.sort(key=lambda x: x[0].get('case_id', ''))
+        elif "Property ID" in sort_by:
+            filtered_results.sort(key=lambda x: x[0].get('property_id', ''))
+        elif "Confidence" in sort_by:
+            filtered_results.sort(key=lambda x: x[1].confidence, reverse=True)
+        
+        st.write(f"**Showing {len(filtered_results)} cases**")
+        
+        # Display options
+        view_mode = st.radio("View Mode", ["Detailed Cards", "Compact Table", "Risk Matrix"], horizontal=True)
+        
+        if view_mode == "Detailed Cards":
+            # Pagination
+            cases_per_page = 10
+            total_pages = max(1, (len(filtered_results) - 1) // cases_per_page + 1)
+            page = st.number_input("Page", min_value=1, max_value=total_pages, value=1)
+            
+            start_idx = (page - 1) * cases_per_page
+            end_idx = min(start_idx + cases_per_page, len(filtered_results))
+            
+            for case, assessment in filtered_results[start_idx:end_idx]:
+                with st.expander(f"📁 {case['case_id']} - Risk: {assessment.risk_level.value.upper()} ({assessment.risk_score:.1%})"):
+                    col1, col2, col3 = st.columns([2, 2, 1])
+                    
+                    with col1:
+                        st.write("**Case Details:**")
+                        st.write(f"• Property: {case.get('property_id', 'N/A')}")
+                        st.write(f"• Account: {case.get('account_holder', 'N/A')}")
+                        st.write(f"• Address: {case.get('address', 'N/A')}")
+                        st.write(f"• Band: {case.get('council_tax_band', 'N/A')}")
+                        st.write(f"• Annual Charge: £{case.get('annual_charge', 0):,}")
+                    
+                    with col2:
+                        st.write("**Risk Assessment:**")
+                        st.write(f"• Score: {assessment.risk_score:.1%}")
+                        st.write(f"• Confidence: {assessment.confidence:.1%}")
+                        st.write(f"• Classification: {'FRAUD' if assessment.is_likely_fraud else 'ERROR' if assessment.is_likely_error else 'UNCERTAIN'}")
+                        if assessment.fraud_type:
+                            st.write(f"• Type: {assessment.fraud_type.value}")
+                    
+                    with col3:
+                        st.plotly_chart(display_risk_gauge(assessment.risk_score), use_container_width=True, key=f"explorer_gauge_{case['case_id']}")
+                    
+                    if assessment.recommendations:
+                        st.write("**Recommended Actions:**")
+                        for rec in assessment.recommendations[:3]:
+                            st.write(f"• {rec}")
+        
+        elif view_mode == "Compact Table":
+            # Create DataFrame for table view
+            table_data = []
+            for case, assessment in filtered_results:
+                table_data.append({
+                    'Case ID': case['case_id'],
+                    'Property': case.get('property_id', 'N/A'),
+                    'Account Holder': case.get('account_holder', 'N/A'),
+                    'Risk Level': assessment.risk_level.value.upper(),
+                    'Risk Score': f"{assessment.risk_score:.1%}",
+                    'Confidence': f"{assessment.confidence:.1%}",
+                    'Classification': 'FRAUD' if assessment.is_likely_fraud else 'ERROR' if assessment.is_likely_error else 'UNCERTAIN',
+                    'Fraud Type': assessment.fraud_type.value if assessment.fraud_type else 'N/A',
+                    'Band': case.get('council_tax_band', 'N/A'),
+                    'Annual Charge': f"£{case.get('annual_charge', 0):,}"
+                })
+            
+            if table_data:
+                df_cases = pd.DataFrame(table_data)
+                st.dataframe(df_cases, use_container_width=True, height=600)
+                
+                # Download option
+                csv = df_cases.to_csv(index=False)
+                st.download_button(
+                    label="Download Cases as CSV",
+                    data=csv,
+                    file_name=f"council_tax_cases_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv",
+                    mime="text/csv"
+                )
+        
+        else:  # Risk Matrix view
+            st.write("**Risk Distribution Matrix**")
+            
+            # Create risk matrix
+            matrix = {'Critical': [], 'High': [], 'Medium': [], 'Low': []}
+            for case, assessment in filtered_results:
+                matrix[assessment.risk_level.value.capitalize()].append((case, assessment))
+            
+            # Display matrix
+            for level in ['Critical', 'High', 'Medium', 'Low']:
+                if matrix[level]:
+                    st.subheader(f"{level} Risk ({len(matrix[level])} cases)")
+                    cols = st.columns(min(4, len(matrix[level])))
+                    for i, (case, assessment) in enumerate(matrix[level][:12]):  # Show max 12 per level
+                        with cols[i % 4]:
+                            color = {'Critical': '🔴', 'High': '🟠', 'Medium': '🟡', 'Low': '🟢'}[level]
+                            st.write(f"{color} **{case['case_id']}**")
+                            st.write(f"Score: {assessment.risk_score:.1%}")
+                            if assessment.fraud_type:
+                                st.write(f"Type: {assessment.fraud_type.value[:15]}...")
+    
+    with tab3:
         st.header("Individual Case Analysis")
         
         # Case input form
@@ -213,7 +385,7 @@ def main():
                 for i, rec in enumerate(assessment.recommendations, 1):
                     st.write(f"{i}. {rec}")
     
-    with tab3:
+    with tab4:
         st.header("Pattern Detection & Analysis")
         
         # Cuckooing detection special section
@@ -278,7 +450,7 @@ def main():
         df_comparison = pd.DataFrame(comparison_data)
         st.table(df_comparison)
     
-    with tab4:
+    with tab5:
         st.header("Statistical Analysis")
         
         # Generate more sample data for statistics
@@ -330,7 +502,7 @@ def main():
         with col3:
             st.metric("Total Prevented", f"£{total_prevented:,}")
     
-    with tab5:
+    with tab6:
         st.header("System Settings")
         
         st.subheader("Risk Thresholds")
