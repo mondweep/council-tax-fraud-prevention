@@ -47,11 +47,34 @@ def main():
     st.title("🛡️ Council Tax Fraud Prevention System")
     st.markdown("### Advanced Detection & Classification Platform")
     
+    # Attribution
+    st.markdown("""
+    <div style='text-align: center; padding: 10px; background-color: #f0f2f6; border-radius: 5px; margin-bottom: 20px;'>
+        <small>Curated by Mondweep Chakravorty as a concept demonstration. 
+        To discuss further, reach out on LinkedIn at 
+        <a href='https://www.linkedin.com/in/mondweepchakravorty/' target='_blank' style='color: #0077B5;'>
+        https://www.linkedin.com/in/mondweepchakravorty/</a></small>
+    </div>
+    """, unsafe_allow_html=True)
+    
     # Initialize detector
     detector = CouncilTaxFraudDetector()
     
     # Sidebar
     st.sidebar.header("Control Panel")
+    
+    # Sidebar Attribution
+    st.sidebar.markdown("---")
+    st.sidebar.markdown("""
+    <div style='padding: 10px; background-color: #f8f9fa; border-radius: 5px; margin-top: 20px;'>
+        <small><b>About this Demo</b><br>
+        Curated by Mondweep Chakravorty as a concept demonstration.<br><br>
+        To discuss further, reach out on LinkedIn:<br>
+        <a href='https://www.linkedin.com/in/mondweepchakravorty/' target='_blank' style='color: #0077B5;'>
+        Connect on LinkedIn</a></small>
+    </div>
+    """, unsafe_allow_html=True)
+    st.sidebar.markdown("---")
     
     # Main tabs
     tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs(["📊 Dashboard", "📋 Case Explorer", "🔍 Case Analysis", "🎯 Pattern Detection", "📈 Statistics", "⚙️ Settings"])
@@ -531,6 +554,20 @@ def main():
         
         if st.button("Save Settings"):
             st.success("Settings saved successfully!")
+    
+    # Footer Attribution
+    st.markdown("---")
+    st.markdown("""
+    <div style='text-align: center; padding: 20px; background-color: #f0f2f6; border-radius: 5px; margin-top: 50px;'>
+        <p style='margin: 0; color: #555;'>
+        <b>Council Tax Fraud Prevention System</b><br>
+        Curated by Mondweep Chakravorty as a concept demonstration<br>
+        To discuss further, reach out on LinkedIn at 
+        <a href='https://www.linkedin.com/in/mondweepchakravorty/' target='_blank' style='color: #0077B5; text-decoration: none;'>
+        <b>https://www.linkedin.com/in/mondweepchakravorty/</b></a>
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
 
 if __name__ == "__main__":
     main()
