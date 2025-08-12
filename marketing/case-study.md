@@ -1,11 +1,15 @@
 # Council Tax Fraud Prevention System: AI-Powered Detection Prototype
 ## Concept Demonstration for UK Local Authorities
 
+**🚀 [View the Live Prototype](https://council-tax-fraud-prevention-mz37fdavwqfzc3zydwug9s.streamlit.app/)** - Experience the fraud detection system in action with 100 sample cases, interactive risk analysis, and comprehensive case exploration tools.
+
 ---
 
 ### Executive Summary
 
 This Council Tax Fraud Prevention System demonstrates how AI algorithms could potentially support UK local authorities in identifying fraud patterns whilst maintaining fairness and accuracy. The prototype explores responsible AI application in public service delivery, aiming to stimulate discussion about innovative approaches to revenue protection.
+
+**[🔗 Try the Interactive Prototype](https://council-tax-fraud-prevention-mz37fdavwqfzc3zydwug9s.streamlit.app/)**
 
 ---
 
